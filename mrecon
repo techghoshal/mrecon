@@ -202,7 +202,7 @@ function reconStart() {
 
 
 
-if [ "$mode" == "" ]
+if [ "$mode" == "" ] || [ "$mode" == "-h" ] || [ "$mode" == "--help" ] || [ "$mode" == "-help" ]
 then
 
 	banner
