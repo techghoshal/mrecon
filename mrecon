@@ -1,0 +1,311 @@
+#!/bin/bash
+
+#TextColor
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+LINK='\033[0;94m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BAN='\033[0;92m'
+
+NC='\033[0m' # No Color
+
+
+mode="${1}"
+domain="${2}"
+urls="${3}"
+DIR=`pwd`
+
+
+function banner() {
+
+	printf " ${BAN} 
+███╗░░░███╗ ██████╗░ ░░░ ██████╗░ ███████╗ ░█████╗░ ░█████╗░ ███╗░░██╗
+████╗░████║ ██╔══██╗ ░░░ ██╔══██╗ ██╔════╝ ██╔══██╗ ██╔══██╗ ████╗░██║
+██╔████╔██║ ██████╔╝ ░░░ ██████╔╝ █████╗░░ ██║░░╚═╝ ██║░░██║ ██╔██╗██║
+██║╚██╔╝██║ ██╔══██╗ ░░░ ██╔══██╗ ██╔══╝░░ ██║░░██╗ ██║░░██║ ██║╚████║
+██║░╚═╝░██║ ██║░░██║ ██╗ ██║░░██║ ███████╗ ╚█████╔╝ ╚█████╔╝ ██║░╚███║
+╚═╝░░░░░╚═╝ ╚═╝░░╚═╝ ╚═╝ ╚═╝░░╚═╝ ╚══════╝ ░╚════╝░ ░╚════╝░ ╚═╝░░╚══╝
+
+			V0.0.1 (beta)
+			Code By Tech Ghoshal with Love <3 ❤
+	${NC}
+	"
+	printf "${RED}
+Youtube:   https://www.youtube.com/@techghoshal
+Twiter:    https://twitter.com/techghoshal
+Facebook:  https://www.facebook.com/techghoshal
+
+	${NC}"
+
+
+}
+
+
+	#Checking tool dependency
+	function CheckingDependency() {
+
+		banner
+		echo -e ""
+		sleep 1
+		printf " ${BLUE}[+] Target: ${RED}${domain}\n${NC}"
+		echo -e ""
+
+		for tool in `cat dependency.txt`
+		do
+
+			if hash ${tool} 2>/dev/null; then
+					
+				printf " ${GREEN}[+] ${BLUE}${tool} found\n${NC}" 
+
+			else
+				printf " ${RED}[+] ${tool} could not be found\n${NC}"
+				exit
+			fi
+
+		done
+
+	}
+
+
+
+# RECON 
+function reconStart() {
+		#Subfinder
+		echo -e ""
+		subfinder -d ${domain} -silent -t 100 -o ${domain}/recon/subfinderSubdomain.txt &
+
+
+		#Ammass
+		# Make sure to add Virustotal , Censys api Key
+		sleep 1
+		amass intel -whois -d ${domain} -o ${domain}/recon/amassIntelResults.txt &
+		amass enum -passive -norecursive -noalts -config amass_config.ini -d ${domain} | tee ${domain}/recon/amassEnumResults.txt &
+
+
+		#crt.sh
+		sleep 1
+		curl -s "https://crt.sh?q=${domain}&output=json" | jq ".[].common_name,.[].name_value" | cut -d'"' -f2 | sed 's/\\n/\n/g' | sed 's/\*.//g'| sed -r 's/([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})//g' | sort | uniq | tee ${domain}/recon/crtshResults.txt &
+
+		#findomain
+		findomain --target ${domain} --unique-output ${domain}/recon/findomain.txt & 
+
+
+		#Subdomin Brute force use ffuf
+		sleep 2
+		ffuf -u "https://FUZZ.${domain}/" -w subdomains.txt -v | grep '| URL |' | grep -Po '.*?//\K.*?(?=/)' | tee ${domain}/recon/ffufBruteSubdResults.txt &
+
+
+	   	#Sorting, httpx, waybackurl, dirsearch
+	    sleep 1
+	    
+	    while [[ true ]]; do
+
+	    	if [[ `ps -C amass | grep amass ` != *"amass"*  ]] && [[ `ps -C subfinder | grep subfinder ` != *"subfinder"*  ]] && [[ `ps -C ffuf | grep ffuf ` != *"ffuf"*  ]]
+	    	then
+
+	    		# amass sorting
+				sort $DIR/${domain}/recon/amassEnumResults.txt $DIR/${domain}/recon/amassIntelResults.txt | uniq | tee ${domain}/recon/amassMainResults.txt
+
+	    		#Subdomain Sorting
+				sort $DIR/${domain}/recon/subfinderSubdomain.txt $DIR/${domain}/recon/amassMainResults.txt $DIR/${domain}/recon/crtshResults.txt $DIR/${domain}/recon/ffufBruteSubdResults.txt $DIR/${domain}/recon/findomain.txt | uniq | tee ${domain}/recon/allsub.txt 
+
+				#httpx START
+				cat ${domain}/recon/allsub.txt | httpx -threads 200 | tee -a ${domain}/recon/finalSubdomain.txt
+				cat ${domain}/recon/allsub.txt | httpx -threads 200 -mc 200,301,302 -path /robots.txt -sc >> ${domain}/recon/robots.txt
+
+				sleep 1
+				#Waybackurl 
+				waybackurls ${domain}/recon/finalSubdomain.txt | tee ${domain}/recon/waybackurls.txt
+				waybackurls ${domain}/recon/finalSubdomain.txt | httpx -status-code | tee ${domain}/recon/httpx_waybackurls.txt
+
+				# JS file Enumeration
+				cat ${domain}/recon/waybackurl.txt | gf js | tee -a ${domain}/recon/gfjs.txt
+
+				sleep 1
+				# Githound
+				# Make sure to add your gihub username/password in config.yaml file
+				./git-hound --subdomain-file $DIR/${domain}/recon/finalSubdomain.txt | tee ${domain}/recon/githound.txt
+
+
+				if [[ "$mode" == '-enumExploit'  ]] && [[ "$domain" == *"."* ]]
+				then
+					sleep 1
+					touch ${domain}/recon/tempCheck.txt 
+				fi
+
+				#Ending Notify
+				# echo -e "[ + ] Enumeration is Done." | notify -silent
+
+				break
+
+			fi
+
+		done &
+	}
+
+
+
+	# Exploit START
+	function exploitStart() {
+		
+		mkdir exploit
+
+		#RunSubzy for subdomain take over vulnerability
+		subzy run --targets ${domain} | tee exploit/subDomain_takeover_Results.txt
+
+		# BUG FINDS USE gf TOOL
+		for n in `gf -list `
+		do 
+			cat ${urls} | gf ${n} | sed 's/=.*/=/' | sed 's/URL: //' | sort -u | tee -a exploit/gf_${n}.txt
+		done 
+
+
+		# run Nuclei
+    	nuclei -silent -l ${domain}  -t $HOME/nuclei-templates/ -o exploit/nucleiResults.txt
+
+	}
+
+
+
+
+	# This for -enum -exploit
+	function enum_exploitStart() {
+		
+		mkdir ${domain}/exploit
+		mkdir exploit
+
+		#RunSubzy for subdomain take over vulnerability
+		subzy run --targets ${domain}/recon/allsub.txt | tee ${domain}/exploit/subDomain_takeover_Results.txt
+
+		# BUG FINDS USE gf TOOL
+		for n in `gf -list`
+		do 
+			cat ${domain}/recon/waybackurls.txt | gf ${n} | sed 's/=.*/=/' | sed 's/URL: //' | sort -u | tee -a ${domain}/exploit/gf_${n}.txt
+		done 
+
+
+		# run Nuclei
+    	nuclei -silent -l ${domain}/recon/finalSubdomain.txt  -t $HOME/nuclei-templates/ -o ${domain}/exploit/nucleiResults.txt
+
+	}
+
+
+
+
+
+#-----------------------------------------------------------------------
+#--------------------------------------------------------------------------------------
+
+
+
+
+
+
+if [ "$mode" == "" ]
+then
+
+	banner
+	echo -e ""
+	printf " [HELP]\n${NC}"
+	printf "   ${YELLOW}mrecon ${GREEN}-enum ${BLUE}target.com\n${NC}"
+	printf "   ${YELLOW}mrecon ${GREEN}-enumExploit ${BLUE}target.com\n${NC}"
+	printf "   ${YELLOW}mrecon ${GREEN}-exploit ${BLUE}finalSubdomain.txt waybackurls.txt\n${NC}"
+
+else
+#--------------------------------------------------------------
+
+
+#Checking tool dependency
+CheckingDependency
+sleep 1
+
+##Enumeration START
+	if [ "$mode" == "-enum" ] && [[ "$domain" == *"."* ]];
+	then
+
+		#Strating Notify 
+		# echo -e ""
+		# echo -e "[ + ] Enumeration START" | notify -silent
+		# echo -e "[ + ] Target: ${domain}" | notify -silent
+		# echo -e "[ + ] recon -enum ${domain}" | notify -silent
+
+
+		mkdir ${domain}
+		mkdir ${domain}/recon
+
+		# recons function start
+		reconStart #Subdomain Enumuration
+
+	
+
+	# Exploit
+	elif  [[ "$mode" == "-exploit" ]] && [[ "$domain" == *"."* ]] && [[ "$urls" == *"."* ]]
+	then
+
+		#Strating Notify 
+		# echo -e ""
+		# echo -e "[ + ] Exploitation START" | notify -silent
+		# echo -e "[ + ] Targets: ${domain}" | notify -silent
+		# echo -e "[ + ] Urls: ${urls}" | notify -silent
+		# echo -e "[ + ] recon -exploit ${domain} ${urls}" | notify -silent
+
+
+		#Exploit function start
+		exploitStart #Finds BUG
+
+		#Ending Notify
+		# echo -e "[ + ] Exploitation is Done."  | notify -silent
+
+	# -enum -exploit
+ 	elif [[ "$mode" == '-enumExploit'  ]] && [[ "$domain" == *"."* ]]
+	then
+
+
+		#Strating Notify
+		# echo -e ""
+		# echo -e "[ + ] enumExploit START" | notify -silent
+		# echo -e "[ + ] Target: ${domain}" | notify -silent
+		# echo -e "[ + ] recon -enum -exploit ${domain}" | notify -silent
+
+
+		echo -e ""
+		sleep 1
+		mkdir ${domain}
+		mkdir ${domain}/recon
+
+		# recons function start
+		reconStart  #Subdomain Enumuration
+
+
+		#Exploit function start
+		while [[ true ]]; do
+
+			if [ -e ${domain}/recon/tempCheck.txt ]
+			then
+				#Exploit function start
+				enum_exploitStart #Finds BUG
+				rm -rf ${domain}/recon/tempCheck.txt
+
+				# #Ending Notify
+				# echo -e "[ + ] Enumeration & Explotion is Done." | notify -silent
+				
+				break	
+
+
+			fi
+		done & 
+
+	else
+		echo -e ""
+		printf "   ${YELLOW}mrecon ${GREEN}-enum ${BLUE}target.com\n${NC}"
+		printf "   ${YELLOW}mrecon ${GREEN}-enumExploit ${BLUE}target.com\n${NC}"
+		printf "   ${YELLOW}mrecon ${GREEN}-exploit ${BLUE}finalSubdomain.txt waybackurls.txt\n${NC}"
+		echo -e ""
+	fi
+
+fi
+
+
+
+

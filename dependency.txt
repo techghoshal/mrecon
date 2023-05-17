@@ -1,0 +1,10 @@
+waybackurls
+subfinder
+findomain
+nuclei
+amass
+httpx
+subzy
+ffuf
+gf
+./git-hound
