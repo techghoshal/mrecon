@@ -40,6 +40,14 @@ then
     #Install waybackurls
     git clone https://github.com/tomnomnom/waybackurls.git
     cd waybackurls && go build . && mv waybackurls /usr/bin && cd .. && rm -rf waybackurls
+    #Katana
+    chmod +x katana
+    cp katana /usr/bin
+    #SecretFinder
+    git clone https://github.com/m4ll0k/SecretFinder.git secretfinder
+    cd secretfinder
+    python -m pip install -r requirements.txt
+    python3 SecretFinder.py
     #Install subzy
     git clone https://github.com/LukaSikic/subzy.git
     cd subzy && go build . && mv subzy /usr/bin && cd .. && rm -rf subzy
