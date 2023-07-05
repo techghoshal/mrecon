@@ -1,4 +1,5 @@
 <h1 align="center">
+    <a href="https://www.youtube.com/@techghoshal"><img src="https://github.com/techghoshal/Fix-Grub-Boot-Menu/assets/85815644/26ed3a3f-a1e6-452c-b2ac-cac5c3d7478e"></a>
   <br>
   <a href="https://www.youtube.com/@techghoshal"><img src="https://github-production-user-asset-6210df.s3.amazonaws.com/85815644/238946831-ee038dec-c7e7-4b03-afd1-3bd822cedbeb.png"></a>
 <h4 align="center">Your Bug Bounty Recon and Vulnerability Detection Made Simple.</h4>
@@ -48,21 +49,6 @@ $ git clone git@github.com:techghoshal/mrecon.git
 $ cd mrecon
 $ sudo ./install.sh
 ```
-
-#### GitHound config.yml
-Make sure your github username and password is in "quotation marks" 
-```bash
-# Required
-github_username: ""
-github_password: ""
-
-# Optional (comment out if not using)
-# github_totp_seed: "ABCDEF1234567890" # Obtained via https://github.com/settings/security
-```
-
-#### Two-Factor Authentication
-
-If GitHound is logged into your GitHub account, two-factor authentication may kick in. You can pass 2FA codes to GitHound with `--otp-code`. Otherwise, GitHound will prompt you for it when it starts up. You can also [supply your 2FA seed](https://github.com/tillson/git-hound/pull/24) in the config and you'll never have to worry about 2FA again. Grab the 2FA seed by decoding the barcode that GitHub shows during the 2FA setup process.
   
 `You can also provie your own CONDIF file with your API Keys for subdomain enumeration with subfinder (/root/.config/subfinder/provider-config.yaml) and amass (amass_config.ini)`
   

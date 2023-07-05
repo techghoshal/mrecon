@@ -46,9 +46,6 @@ then
     #Install ffuf
     git clone https://github.com/ffuf/ffuf.git
     cd ffuf && go build . && mv ffuf /usr/bin && cd .. && rm -rf ffuf
-    #Install git-hound
-    git clone https://github.com/tillson/git-hound.git
-    cd git-hound && go build . && mv git-hound git-hounds && mv git-hounds .. && cd .. && rm -rf git-hound && mv git-hounds git-hound
     #Install gf
     git clone https://github.com/tomnomnom/gf.git
     cd gf
@@ -80,7 +77,6 @@ then
 else 
     echo "You are not root!"
 fi
-
 
 
 
