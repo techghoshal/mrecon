@@ -32,7 +32,6 @@ Enumeration -
 1. Effective Subdomain Enumeration from Various Tools
 2. Get URLs with open HTTP and HTTPS service
 3. JS File Enumeration
-4. GitHub code search, Scans for exposed API keys across all of GitHub
 
 Vulnerability Detection - 
 1. Subdomain takeover vulnerability checker
