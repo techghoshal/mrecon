@@ -6,7 +6,7 @@
 
 <p align="center">
 <a><img title="Made with hart" src="https://img.shields.io/badge/Made%20with-%E2%9D%A4-red"></a>
-<a><img title="Made with hart" src="https://img.shields.io/badge/release-v0.0.1-blue"></a>
+<a><img title="Made with hart" src="https://img.shields.io/badge/release-v0.1.1-blue"></a>
 <br>
 <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/techghoshal?style=social">
 </p>
@@ -32,7 +32,6 @@ Enumeration -
 1. Effective Subdomain Enumeration from Various Tools
 2. Get URLs with open HTTP and HTTPS service
 3. JS File Enumeration
-4. GitHub code search, Scans for exposed API keys across all of GitHub
 
 Vulnerability Detection - 
 1. Subdomain takeover vulnerability checker
