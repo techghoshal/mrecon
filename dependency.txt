@@ -2,6 +2,7 @@ waybackurls
 subfinder
 findomain
 nuclei
+katana
 amass
 httpx
 subzy

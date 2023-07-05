@@ -124,7 +124,7 @@ function reconStart() {
 
 				sleep 1
 				# SecretFinder
-				cat ${domain}/recon/jsFile.txt | while read url; do python3 SecretFinder/SecretFinder.py -i $url -o cli | tee -a ${domain}/recon/secret.txt
+				cat ${domain}/recon/jsFile.txt | while read url; do python3 secretFinder/SecretFinder.py -i $url -o cli | tee -a ${domain}/recon/secret.txt; done
 
 
 				if [[ "$mode" == '-enumExploit'  ]] && [[ "$domain" == *"."* ]]
@@ -223,4 +223,84 @@ sleep 1
 	if [ "$mode" == "-enum" ] && [[ "$domain" == *"."* ]];
 	then
 
-		#St
+		#Strating Notify 
+		# echo -e ""
+		# echo -e "[ + ] Enumeration START" | notify -silent
+		# echo -e "[ + ] Target: ${domain}" | notify -silent
+		# echo -e "[ + ] recon -enum ${domain}" | notify -silent
+
+
+		mkdir ${domain}
+		mkdir ${domain}/recon
+
+		# recons function start
+		reconStart #Subdomain Enumuration
+
+	
+
+	# Exploit
+	elif  [[ "$mode" == "-exploit" ]] && [[ "$domain" == *"."* ]] && [[ "$urls" == *"."* ]]
+	then
+
+		#Strating Notify 
+		# echo -e ""
+		# echo -e "[ + ] Exploitation START" | notify -silent
+		# echo -e "[ + ] Targets: ${domain}" | notify -silent
+		# echo -e "[ + ] Urls: ${urls}" | notify -silent
+		# echo -e "[ + ] recon -exploit ${domain} ${urls}" | notify -silent
+
+
+		#Exploit function start
+		exploitStart #Finds BUG
+
+		#Ending Notify
+		# echo -e "[ + ] Exploitation is Done."  | notify -silent
+
+	# -enum -exploit
+ 	elif [[ "$mode" == '-enumExploit'  ]] && [[ "$domain" == *"."* ]]
+	then
+
+
+		#Strating Notify
+		# echo -e ""
+		# echo -e "[ + ] enumExploit START" | notify -silent
+		# echo -e "[ + ] Target: ${domain}" | notify -silent
+		# echo -e "[ + ] recon -enum -exploit ${domain}" | notify -silent
+
+
+		echo -e ""
+		sleep 1
+		mkdir ${domain}
+		mkdir ${domain}/recon
+
+		# recons function start
+		reconStart  #Subdomain Enumuration
+
+
+		#Exploit function start
+		while [[ true ]]; do
+
+			if [ -e ${domain}/recon/tempCheck.txt ]
+			then
+				#Exploit function start
+				enum_exploitStart #Finds BUG
+				rm -rf ${domain}/recon/tempCheck.txt
+
+				# #Ending Notify
+				# echo -e "[ + ] Enumeration & Explotion is Done." | notify -silent
+				
+				break	
+
+
+			fi
+		done & 
+
+	else
+		echo -e ""
+		printf "   ${YELLOW}mrecon ${GREEN}-enum ${BLUE}target.com\n${NC}"
+		printf "   ${YELLOW}mrecon ${GREEN}-enumExploit ${BLUE}target.com\n${NC}"
+		printf "   ${YELLOW}mrecon ${GREEN}-exploit ${BLUE}finalSubdomain.txt waybackurls.txt\n${NC}"
+		echo -e ""
+	fi
+
+fi
