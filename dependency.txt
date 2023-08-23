@@ -1,11 +1,6 @@
 waybackurls
 subfinder
 findomain
-nuclei
-katana
 amass
 httpx
-subzy
 ffuf
-gf
-./git-hound

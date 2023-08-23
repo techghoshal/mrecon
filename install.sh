@@ -32,49 +32,18 @@ then
     rm -rf findomain-linux-i386.zip
     findomain --help
     #Install httpx
-    git clone https://github.com/projectdiscovery/httpx.git
-    cd httpx/cmd/httpx/ && go build . && mv httpx /usr/bin && cd ../../../ && rm -rf httpx  
-    #Install nuclei
-    git clone https://github.com/projectdiscovery/nuclei.git
-    cd nuclei/v2/cmd/nuclei/ && go build . && mv nuclei /usr/bin && cd ../../../../ && rm -rf nuclei && nuclei
+    mv httpx /usr/bin
     #Install waybackurls
     git clone https://github.com/tomnomnom/waybackurls.git
     cd waybackurls && go build . && mv waybackurls /usr/bin && cd .. && rm -rf waybackurls
-    #Katana
-    chmod +x katana
-    cp katana /usr/bin
     #SecretFinder
     git clone https://github.com/m4ll0k/SecretFinder.git secretfinder
     cd secretfinder
     python -m pip install -r requirements.txt
     python3 SecretFinder.py
-    #Install subzy
-    git clone https://github.com/LukaSikic/subzy.git
-    cd subzy && go build . && mv subzy /usr/bin && cd .. && rm -rf subzy
     #Install ffuf
     git clone https://github.com/ffuf/ffuf.git
     cd ffuf && go build . && mv ffuf /usr/bin && cd .. && rm -rf ffuf
-    #Install gf
-    git clone https://github.com/tomnomnom/gf.git
-    cd gf
-    sleep 1
-    cp gf-completion.zsh /usr/local/go/src/ 
-    sleep 1
-    cd .. 
-    git clone https://github.com/1ndianl33t/Gf-Patterns.git
-    go install github.com/tomnomnom/gf@latest
-    cp /root/go/bin/gf /usr/local/go/bin/
-    echo source $GOROOT/src/gf-completion.zsh >> ~/.zshrc 
-    cd gf/ 
-    cp -r examples ~/.gf
-    cd ..
-    cd Gf-Patterns/
-    cp *.json ~/.gf
-    cd ..
-    rm -rf gf Gf-Patterns
-    mv gf-temp gf
-    mv gf /usr/bin
-    gf -list
     #For crt.sh
     sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -

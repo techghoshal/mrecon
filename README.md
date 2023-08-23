@@ -27,16 +27,11 @@ Introducing MR.RECON, an advanced and versatile bug bounty recon and vulnerabili
   
   
 ## How it works ?
-#### This tool mainly performs 2 tasks
+
 Enumeration - 
 1. Effective Subdomain Enumeration from Various Tools
 2. Get URLs with open HTTP and HTTPS service
 3. JS File Enumeration
-
-Vulnerability Detection - 
-1. Subdomain takeover vulnerability checker
-2. Finds 37+ Vulnerability<br>
-So basically, this is an autmation script for your initial recon and Vulnerability Detection in bugbounty
 
   
 ## Setup MR.RECON
@@ -59,8 +54,6 @@ $ sudo ./install.sh
 ```bash
  [HELP]
    mrecon -enum target.com
-   mrecon -enumExploit target.com
-   mrecon -exploit finalSubdomain.txt waybackurls.txt
   ```
 
   
@@ -69,17 +62,6 @@ $ sudo ./install.sh
 Subdomain and JS File Enumuration, Get URL, Github code search, Find API Keys across all of GitHub
 ```bash
 mrecon -enum target.com
-```
-
-#### 2. Exploitation Mode - 
-Subdomain takeover and finds 37+ vulnerability
-```bash
-mrecon -exploit finalSubdomain.txt waybackurls.txt
-```
-#### 3. Enumuration Exploitation Mode - 
-Enumuration and Exploitation run together
-```bash
-mrecon -enumExploit target.com
 ```
 
 ## For Developers
