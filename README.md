@@ -2,7 +2,7 @@
     <a href="https://www.youtube.com/@techghoshal"><img src="https://github.com/techghoshal/Fix-Grub-Boot-Menu/assets/85815644/26ed3a3f-a1e6-452c-b2ac-cac5c3d7478e"></a>
   <br>
   <a href="https://www.youtube.com/@techghoshal"><img src="https://github-production-user-asset-6210df.s3.amazonaws.com/85815644/238946831-ee038dec-c7e7-4b03-afd1-3bd822cedbeb.png"></a>
-<h4 align="center">Your Bug Bounty Recon and Vulnerability Detection Made Simple.</h4>
+<h4 align="center">Your Bug Bounty Recon and Vulnerability Detection Made Simple</h4>
 
 <p align="center">
 <a><img title="Made with hart" src="https://img.shields.io/badge/Made%20with-%E2%9D%A4-red"></a>
