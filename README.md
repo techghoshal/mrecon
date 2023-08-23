@@ -6,7 +6,7 @@
 
 <p align="center">
 <a><img title="Made with hart" src="https://img.shields.io/badge/Made%20with-%E2%9D%A4-red"></a>
-<a><img title="Made with hart" src="https://img.shields.io/badge/release-v0.1.1-blue"></a>
+<a><img title="Made with hart" src="https://img.shields.io/badge/release-v0.0.2-blue"></a>
 <br>
 <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/techghoshal?style=social">
 </p>
