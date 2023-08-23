@@ -52,7 +52,7 @@ $ sudo ./install.sh
 $ ./mrecon -h
 ```
 ```bash
-   $ ./mrecon -enum target.com
+$ ./mrecon -enum target.com
   ```
 
   
