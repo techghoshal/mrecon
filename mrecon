@@ -152,7 +152,7 @@ then
 	banner
 	echo -e ""
 	printf " [HELP]\n${NC}"
-	printf "   ${YELLOW}mrecon ${GREEN}-enum ${BLUE}target.com\n${NC}"
+	printf "   ${YELLOW}$ ./mrecon ${GREEN}-enum ${BLUE}target.com\n${NC}"
 
 else
 	
@@ -184,7 +184,7 @@ sleep 1
 	else
 		echo -e ""
 		printf " [HELP]\n${NC}"
-		printf "   ${YELLOW}mrecon ${GREEN}-enum ${BLUE}target.com\n${NC}"
+		printf "   ${YELLOW}$ ./mrecon ${GREEN}-enum ${BLUE}target.com\n${NC}"
 		echo -e ""
 	fi
 
