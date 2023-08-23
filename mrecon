@@ -149,7 +149,6 @@ function reconStart() {
 if [ "$mode" == "" ] || [ "$mode" == "-h" ] || [ "$mode" == "--help" ] || [ "$mode" == "-help" ]
 then
 
-
 	banner
 	echo -e ""
 	printf " [HELP]\n${NC}"
