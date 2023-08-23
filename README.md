@@ -49,18 +49,18 @@ $ sudo ./install.sh
  ## Easy to use
 
 ```bash
-./mrecon -h
+$ ./mrecon -h
 ```
 ```bash
-   ./mrecon -enum target.com
+   $ ./mrecon -enum target.com
   ```
 
   
 ### Modes
 #### 1. Enumuration Mode - 
-Subdomain and JS File Enumuration, Get URL, Github code search, Find API Keys across all of GitHub
+Subdomain and JS File Enumuration, Get URL, Find API Keys From JS File
 ```bash
-mrecon -enum target.com
+$ ./mrecon -enum target.com
 ```
 
 ## For Developers
