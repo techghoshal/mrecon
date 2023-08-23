@@ -46,7 +46,7 @@ $ sudo ./install.sh
   
 `You can also provie your own CONDIF file with your API Keys for subdomain enumeration with subfinder (/root/.config/subfinder/provider-config.yaml) and amass (amass_config.ini)`
   
- ## Easy Usage
+ ## Easy to use
 
 ```bash
 ./mrecon -h
